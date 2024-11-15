@@ -1,10 +1,13 @@
 {
   "extends": [
-    "next",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off"
   }
 }
