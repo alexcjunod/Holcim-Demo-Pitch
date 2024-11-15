@@ -13,6 +13,7 @@ export default function Home() {
   const [showSupplierOnboarding, setShowSupplierOnboarding] = useState(false)
   const [showBuyerOnboarding, setShowBuyerOnboarding] = useState(false)
   const [showOrchestratorOnboarding, setShowOrchestratorOnboarding] = useState(false)
+  const [showLogisticsOnboarding, setShowLogisticsOnboarding] = useState(false)
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-b from-[#1D4370] to-[#94C12E]">
