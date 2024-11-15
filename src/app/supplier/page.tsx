@@ -15,6 +15,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import SupplierOnboardingPopup from "@/components/supplier-onboarding-popup"
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const emissionsData = [
   { stage: 'Raw Materials', emissions: 250 },
   { stage: 'Transportation', emissions: 100 },
@@ -56,10 +62,10 @@ const monthlyProgress = [
   { month: 'Jun', reduction: 25 },
 ]
 
-function ProductEnvironmentalImpact({ product }) {
+function ProductEnvironmentalImpact({ product }: { product: Product }) {
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-4">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Carbon Footprint</CardTitle>
@@ -115,7 +121,7 @@ function ProductEnvironmentalImpact({ product }) {
               <CardDescription>Breakdown of environmental metrics across different stages</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={lifecycleData}>
                   <XAxis dataKey="stage" />
                   <YAxis />
@@ -135,7 +141,7 @@ function ProductEnvironmentalImpact({ product }) {
               <CardDescription>Monthly progress in reducing carbon footprint</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={monthlyProgress}>
                   <XAxis dataKey="month" />
                   <YAxis />
@@ -228,7 +234,7 @@ function ProductEnvironmentalImpact({ product }) {
 
 export default function SupplierDashboard() {
   const [showDashboard, setShowDashboard] = useState(true)
-  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const handleOnboardingComplete = () => {
     setShowDashboard(true)
@@ -344,7 +350,7 @@ export default function SupplierDashboard() {
                 <CardDescription>CO2 equivalent emissions across the concrete production lifecycle</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={emissionsData}>
                     <XAxis dataKey="stage" />
                     <YAxis />
@@ -364,7 +370,7 @@ export default function SupplierDashboard() {
                 <CardDescription>Total CO2 equivalent emissions over the past 6 months</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={200}>
                   <LineChart data={monthlyEmissions}>
                     <XAxis dataKey="month" />
                     <YAxis />
@@ -405,7 +411,7 @@ export default function SupplierDashboard() {
                                 View Environmental Impact
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-4xl">
+                            <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle>{product.name} - Environmental Impact</DialogTitle>
                                 <DialogDescription>
