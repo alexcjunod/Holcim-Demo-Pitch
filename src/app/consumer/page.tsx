@@ -433,6 +433,8 @@ function ChatbotPopup({ isOpen, onClose }: ChatbotPopupProps) {
 }
 
 export default function ConsumerDashboard() {
+  const [showOnboarding, setShowOnboarding] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [showDashboard, setShowDashboard] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedMaterial, setSelectedMaterial] = useState('concrete')
@@ -444,7 +446,34 @@ export default function ConsumerDashboard() {
   const [minRecycled, setMinRecycled] = useState('')
   const [showChatbot, setShowChatbot] = useState(false)
 
+  // Define the certifications array inside the component
+  const certifications = [
+    { 
+      name: "EPD Certified", 
+      image: "/images/certifications/epd-certified.png",
+      progress: 75 
+    },
+    { 
+      name: "EN 15804", 
+      image: "/images/certifications/en-15804.png",
+      progress: 60 
+    },
+    { 
+      name: "ISO 14040", 
+      image: "/images/certifications/iso-14040.png",
+      progress: 65 
+    },
+    { 
+      name: "ECO Platform", 
+      image: "/images/certifications/eco-platform.png",
+      progress: 40 
+    }
+  ]
+
   useEffect(() => {
+    setIsLoading(false)
+    
+    // Check onboarding status
     const onboardingComplete = localStorage.getItem('buyerOnboardingComplete')
     if (onboardingComplete === 'true') {
       setShowDashboard(true)
@@ -466,6 +495,10 @@ export default function ConsumerDashboard() {
     setShowSearchResults(true)
   }
 
+  if (isLoading) {
+    return null // or a loading spinner
+  }
+
   if (!showDashboard) {
     return <BuyerOnboardingPopup onComplete={handleOnboardingComplete} />
   }
@@ -480,6 +513,15 @@ export default function ConsumerDashboard() {
           </Link>
         </div>
         <nav className="flex flex-col gap-2 p-4">
+          <Button 
+            variant="ghost" 
+            className="justify-start gap-2 text-blue-600"
+            onClick={() => setShowOnboarding(true)}
+          >
+            <FileText className="h-4 w-4" />
+            View Onboarding Guide
+          </Button>
+          <Separator className="my-2" />
           <Button variant="ghost" className="justify-start gap-2">
             <Home className="h-4 w-4" />
             Dashboard
@@ -777,14 +819,19 @@ export default function ConsumerDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    { name: "LEED Certification", progress: 75 },
-                    { name: "BREEAM Assessment", progress: 60 },
-                    { name: "WELL Building Standard", progress: 40 },
-                  ].map((cert, index) => (
+                  {certifications.map((cert, index) => (
                     <div key={index} className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>{cert.name}</span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Image 
+                            src={cert.image}
+                            alt={cert.name}
+                            width={32}
+                            height={32}
+                            className="object-contain"
+                          />
+                          <span className="font-medium">{cert.name}</span>
+                        </div>
                         <span>{cert.progress}%</span>
                       </div>
                       <Progress value={cert.progress} className="w-full" />

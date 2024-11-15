@@ -33,8 +33,9 @@ const materialDistribution = [
   { name: 'Other', value: 20 },
 ]
 
-export default function HolcimAdminDashboard() {
-  const [showDashboard, setShowDashboard] = useState(false)
+export default function OrchestratorDashboard() {
+  const [showDashboard, setShowDashboard] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [showAlert, setShowAlert] = useState(true)
 
@@ -53,10 +54,19 @@ export default function HolcimAdminDashboard() {
         <div className="flex h-16 items-center border-b px-4">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/Holcim_idvoMN9469_6.png" alt="Holcim Logo" width={32} height={32} />
-            <span className="text-lg font-semibold text-[#1D4370]">Holcim Admin</span>
+            <span className="text-lg font-semibold text-[#1D4370]">Holcim Connect</span>
           </Link>
         </div>
         <nav className="flex flex-col gap-2 p-4">
+          <Button 
+            variant="ghost" 
+            className="justify-start gap-2 text-blue-600"
+            onClick={() => setShowOnboarding(true)}
+          >
+            <FileText className="h-4 w-4" />
+            View Onboarding Guide
+          </Button>
+          <Separator className="my-2" />
           <Button variant="ghost" className="justify-start gap-2">
             <Home className="h-4 w-4" />
             Dashboard
@@ -84,6 +94,13 @@ export default function HolcimAdminDashboard() {
           </Button>
         </nav>
       </aside>
+
+      {showOnboarding && (
+        <OrchestratorOnboardingPopup 
+          onComplete={() => setShowOnboarding(false)} 
+        />
+      )}
+
       <main className="flex-1 overflow-y-auto">
         <header className="sticky top-0 z-10 flex h-16 items-center border-b bg-white px-4 md:px-6">
           <form className="hidden md:block">

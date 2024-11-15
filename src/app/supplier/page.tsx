@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Bell, Building2, ChevronDown, FileText, Globe2, Home, Package, PieChart, Plus, Settings, Truck, Leaf, Recycle, X } from 'lucide-react'
@@ -234,7 +234,15 @@ function ProductEnvironmentalImpact({ product }: { product: Product }) {
 
 export default function SupplierDashboard() {
   const [showDashboard, setShowDashboard] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
+  useEffect(() => {
+    const onboardingComplete = localStorage.getItem('supplierOnboardingComplete')
+    if (onboardingComplete === 'true') {
+      setShowDashboard(true)
+    }
+  }, [])
 
   const handleOnboardingComplete = () => {
     setShowDashboard(true)
@@ -255,6 +263,15 @@ export default function SupplierDashboard() {
           </Link>
         </div>
         <nav className="flex flex-col gap-2 p-4">
+          <Button 
+            variant="ghost" 
+            className="justify-start gap-2 text-blue-600"
+            onClick={() => setShowOnboarding(true)}
+          >
+            <FileText className="h-4 w-4" />
+            View Onboarding Guide
+          </Button>
+          <Separator className="my-2" />
           <Button variant="ghost" className="justify-start gap-2">
             <Home className="h-4 w-4" />
             Dashboard
@@ -282,6 +299,11 @@ export default function SupplierDashboard() {
           </Button>
         </nav>
       </aside>
+      {showOnboarding && (
+        <SupplierOnboardingPopup 
+          onComplete={() => setShowOnboarding(false)} 
+        />
+      )}
       <main className="flex-1 overflow-y-auto">
         <header className="sticky top-0 z-10 flex h-16 items-center border-b bg-white px-4 md:px-6">
           <div className="ml-auto flex items-center gap-4">
