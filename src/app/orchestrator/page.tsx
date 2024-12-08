@@ -33,6 +33,27 @@ const materialDistribution = [
   { name: 'Other', value: 20 },
 ]
 
+const recentMembers = [
+  { 
+    name: "Alice Johnson", 
+    company: "Green Builders Inc.", 
+    type: "Consumer",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice"
+  },
+  { 
+    name: "Bob Smith", 
+    company: "EcoMaterials Ltd.", 
+    type: "Supplier",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"
+  },
+  { 
+    name: "Carol Williams", 
+    company: "Sustainable Projects Co.", 
+    type: "Consumer",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol"
+  },
+]
+
 export default function OrchestratorDashboard() {
   const [showDashboard, setShowDashboard] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -252,13 +273,10 @@ export default function OrchestratorDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {[
-                      { name: "Alice Johnson", company: "Green Builders Inc.", type: "Consumer" },
-                      { name: "Bob Smith", company: "EcoMaterials Ltd.", type: "Supplier" },
-                      { name: "Carol Williams", company: "Sustainable Projects Co.", type: "Consumer" },
-                    ].map((member, index) => (
+                    {recentMembers.map((member, index) => (
                       <div key={index} className="flex items-center space-x-4">
                         <Avatar>
+                          <AvatarImage src={member.image} alt={member.name} />
                           <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>

@@ -26,6 +26,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import BuyerOnboardingPopup from "@/components/buyer-onboarding-popup"
+import ChatbotPopup from '@/components/chatbot-popup'
 
 const projectEmissions = [
   { project: 'Office Building A', emissions: 1200, target: 1000 },
@@ -44,19 +45,19 @@ const monthlyEmissions = [
 ]
 
 const materialData = [
-  { id: 1, name: 'Standard Concrete', type: 'Concrete', supplier: 'ConcreteWorks Inc.', carbon: 100, cost: 50, durability: 70, strength: 30, recyclability: 20, image: '/placeholder.svg?height=100&width=100' },
-  { id: 2, name: 'Low-Carbon Concrete', type: 'Concrete', supplier: 'GreenConcrete Co.', carbon: 70, cost: 60, durability: 75, strength: 32, recyclability: 30, image: '/placeholder.svg?height=100&width=100' },
-  { id: 3, name: 'Ultra-Low-Carbon Concrete', type: 'Concrete', supplier: 'EcoCement Solutions', carbon: 50, cost: 75, durability: 80, strength: 35, recyclability: 40, image: '/placeholder.svg?height=100&width=100' },
-  { id: 4, name: 'Recycled Aggregate Concrete', type: 'Concrete', supplier: 'RecyclePro Materials', carbon: 60, cost: 55, durability: 72, strength: 28, recyclability: 60, image: '/placeholder.svg?height=100&width=100' },
-  { id: 5, name: 'Standard Steel', type: 'Steel', supplier: 'SteelWorks Ltd.', carbon: 150, cost: 80, durability: 85, strength: 50, recyclability: 70, image: '/placeholder.svg?height=100&width=100' },
-  { id: 6, name: 'Recycled Steel', type: 'Steel', supplier: 'GreenSteel Inc.', carbon: 100, cost: 75, durability: 83, strength: 48, recyclability: 90, image: '/placeholder.svg?height=100&width=100' },
-  { id: 7, name: 'High-Strength Steel', type: 'Steel', supplier: 'ToughSteel Corp.', carbon: 180, cost: 100, durability: 90, strength: 60, recyclability: 65, image: '/placeholder.svg?height=100&width=100' },
-  { id: 8, name: 'Pine', type: 'Wood', supplier: 'NaturalWood Suppliers', carbon: 20, cost: 40, durability: 50, strength: 20, recyclability: 80, image: '/placeholder.svg?height=100&width=100' },
-  { id: 9, name: 'Oak', type: 'Wood', supplier: 'PremiumTimber Co.', carbon: 25, cost: 60, durability: 70, strength: 30, recyclability: 75, image: '/placeholder.svg?height=100&width=100' },
-  { id: 10, name: 'Engineered Wood', type: 'Wood', supplier: 'TechWood Innovations', carbon: 30, cost: 55, durability: 65, strength: 35, recyclability: 70, image: '/placeholder.svg?height=100&width=100' },
-  { id: 11, name: 'Standard Glass', type: 'Glass', supplier: 'ClearView Glass', carbon: 80, cost: 45, durability: 60, strength: 25, recyclability: 95, image: '/placeholder.svg?height=100&width=100' },
-  { id: 12, name: 'Low-E Glass', type: 'Glass', supplier: 'EnergySmartGlass', carbon: 85, cost: 55, durability: 65, strength: 26, recyclability: 90, image: '/placeholder.svg?height=100&width=100' },
-  { id: 13, name: 'Tempered Glass', type: 'Glass', supplier: 'SafeGlass Technologies', carbon: 90, cost: 60, durability: 75, strength: 40, recyclability: 85, image: '/placeholder.svg?height=100&width=100' },
+  { id: 1, name: 'Standard Concrete', type: 'Concrete', supplier: 'ConcreteWorks Inc.', carbon: 100, cost: 50, durability: 70, strength: 30, recyclability: 20, image: '/images/products/concrete-standard.jpg' },
+  { id: 2, name: 'Low-Carbon Concrete', type: 'Concrete', supplier: 'GreenConcrete Co.', carbon: 70, cost: 60, durability: 75, strength: 32, recyclability: 30, image: '/images/products/concrete-low-carbon.jpg' },
+  { id: 3, name: 'Ultra-Low-Carbon Concrete', type: 'Concrete', supplier: 'EcoCement Solutions', carbon: 50, cost: 75, durability: 80, strength: 35, recyclability: 40, image: '/images/products/concrete-ultra-low.jpg' },
+  { id: 4, name: 'Recycled Aggregate Concrete', type: 'Concrete', supplier: 'RecyclePro Materials', carbon: 60, cost: 55, durability: 72, strength: 28, recyclability: 60, image: '/images/products/concrete-recycled.jpg' },
+  { id: 5, name: 'Standard Steel', type: 'Steel', supplier: 'SteelWorks Ltd.', carbon: 150, cost: 80, durability: 85, strength: 50, recyclability: 70, image: '/images/products/steel-normal.jpg' },
+  { id: 6, name: 'Recycled Steel', type: 'Steel', supplier: 'GreenSteel Inc.', carbon: 100, cost: 75, durability: 83, strength: 48, recyclability: 90, image: '/images/products/steel-recycled.jpg' },
+  { id: 7, name: 'High-Strength Steel', type: 'Steel', supplier: 'ToughSteel Corp.', carbon: 180, cost: 100, durability: 90, strength: 60, recyclability: 65, image: '/images/products/concrete-recycled.jpg' },
+  { id: 8, name: 'Pine', type: 'Wood', supplier: 'NaturalWood Suppliers', carbon: 20, cost: 40, durability: 50, strength: 20, recyclability: 80, image: '/images/products/wood-pine.jpg' },
+  { id: 9, name: 'Oak', type: 'Wood', supplier: 'PremiumTimber Co.', carbon: 25, cost: 60, durability: 70, strength: 30, recyclability: 75, image: '/images/products/wood-oak.jpg' },
+  { id: 10, name: 'Engineered Wood', type: 'Wood', supplier: 'TechWood Innovations', carbon: 30, cost: 55, durability: 65, strength: 35, recyclability: 70, image: '/images/products/wood-engineered.jpg' },
+  { id: 11, name: 'Standard Glass', type: 'Glass', supplier: 'ClearView Glass', carbon: 80, cost: 45, durability: 60, strength: 25, recyclability: 95, image: '/images/products/glass-standard.jpg' },
+  { id: 12, name: 'Low-E Glass', type: 'Glass', supplier: 'EnergySmartGlass', carbon: 85, cost: 55, durability: 65, strength: 26, recyclability: 90, image: '/images/products/glass-lowe.jpg' },
+  { id: 13, name: 'Tempered Glass', type: 'Glass', supplier: 'SafeGlass Technologies', carbon: 90, cost: 60, durability: 75, strength: 40, recyclability: 85, image: '/images/products/glass-tempered.jpg' },
 ]
 
 interface Material {
@@ -374,64 +375,6 @@ function AIRecommendations() {
   )
 }
 
-function ChatbotPopup({ isOpen, onClose }: ChatbotPopupProps) {
-  const [messages, setMessages] = useState([
-    { role: 'bot', content: 'Hello! How can I assist you today?' }
-  ])
-  const [input, setInput] = useState('')
-
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages([...messages, { role: 'user', content: input }])
-      // Simulate bot response (in a real scenario, this would be an API call)
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'bot', content: 'Thank you for your message. Our team will get back to you soon with more information.' }])
-      }, 1000)
-      setInput('')
-    }
-  }
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-xl overflow-hidden"
-        >
-          <div className="p-4 bg-primary text-primary-foreground flex justify-between items-center">
-            <h3 className="font-semibold">Holcim Assistant</h3>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-          <ScrollArea className="h-64 p-4">
-            {messages.map((msg, index) => (
-              <div key={index} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                <span className={`inline-block p-2 rounded-lg ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                  {msg.content}
-                </span>
-              </div>
-            ))}
-          </ScrollArea>
-          <div className="p-4 border-t">
-            <div className="flex space-x-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message..."
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              />
-              <Button onClick={handleSend}>Send</Button>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
-
 export default function ConsumerDashboard() {
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
@@ -465,7 +408,7 @@ export default function ConsumerDashboard() {
     },
     { 
       name: "ECO Platform", 
-      image: "/images/certifications/eco-platform.png",
+      image: "/images/certifications/iso-14040.png",
       progress: 40 
     }
   ]

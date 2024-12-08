@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Bell, Building2, ChevronDown, FileText, Globe2, Home, Package, PieChart, Plus, Settings, Truck, Leaf, Recycle, X } from 'lucide-react'
+import { Bell, Building2, ChevronDown, FileText, Globe2, Home, Package, PieChart, Plus, Settings, Truck, Leaf, Recycle, X, MessageSquare } from 'lucide-react'
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { Button } from "@/components/ui/button"
@@ -14,11 +14,26 @@ import { Separator } from "@/components/ui/separator"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import SupplierOnboardingPopup from "@/components/supplier-onboarding-popup"
+import ChatbotPopup from '@/components/chatbot-popup'
+import { Badge } from "@/components/ui/badge"
 
 interface Product {
   id: number;
   name: string;
   description: string;
+}
+
+interface Order {
+  id: string;
+  customer: {
+    name: string;
+    logo: string;
+  };
+  product: string;
+  quantity: string;
+  status: 'Processing' | 'Shipped' | 'Delivered' | 'Pending';
+  date: string;
+  value: string;
 }
 
 const emissionsData = [
@@ -60,6 +75,57 @@ const monthlyProgress = [
   { month: 'Apr', reduction: 15 },
   { month: 'May', reduction: 20 },
   { month: 'Jun', reduction: 25 },
+]
+
+const recentOrders: Order[] = [
+  {
+    id: '#1234',
+    customer: {
+      name: 'Acme Construction',
+      logo: '/images/customers/acme.png'
+    },
+    product: 'ECOPlanet Cement',
+    quantity: '500 tons',
+    status: 'Processing',
+    date: '2024-03-15',
+    value: '$45,000'
+  },
+  {
+    id: '#1235',
+    customer: {
+      name: 'BuildRight Inc.',
+      logo: '/images/customers/buildright.png'
+    },
+    product: 'Recycled Aggregate',
+    quantity: '300 tons',
+    status: 'Shipped',
+    date: '2024-03-14',
+    value: '$28,500'
+  },
+  {
+    id: '#1236',
+    customer: {
+      name: 'GreenBuild Solutions',
+      logo: '/images/customers/greenbuild.png'
+    },
+    product: 'Low-Carbon Concrete Mix',
+    quantity: '750 tons',
+    status: 'Pending',
+    date: '2024-03-13',
+    value: '$67,500'
+  },
+  {
+    id: '#1237',
+    customer: {
+      name: 'EcoStruct Ltd.',
+      logo: '/images/customers/ecostruct.png'
+    },
+    product: 'GreenConcrete Mix',
+    quantity: '250 tons',
+    status: 'Delivered',
+    date: '2024-03-12',
+    value: '$22,750'
+  }
 ]
 
 function ProductEnvironmentalImpact({ product }: { product: Product }) {
@@ -168,7 +234,7 @@ function ProductEnvironmentalImpact({ product }: { product: Product }) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
                   <Image 
-                    src="/placeholder.svg" 
+                    src="/images/certifications/epd-certified.png" 
                     alt="EPD Certified" 
                     width={80} 
                     height={80}
@@ -178,7 +244,7 @@ function ProductEnvironmentalImpact({ product }: { product: Product }) {
                 </div>
                 <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
                   <Image 
-                    src="/placeholder.svg" 
+                    src="/images/certifications/en-15804.png" 
                     alt="EN 15804" 
                     width={80} 
                     height={80}
@@ -188,7 +254,7 @@ function ProductEnvironmentalImpact({ product }: { product: Product }) {
                 </div>
                 <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
                   <Image 
-                    src="/placeholder.svg" 
+                    src="/images/certifications/iso-14040.png" 
                     alt="ISO 14040" 
                     width={80} 
                     height={80}
@@ -198,7 +264,7 @@ function ProductEnvironmentalImpact({ product }: { product: Product }) {
                 </div>
                 <div className="flex flex-col items-center gap-2 p-4 border rounded-lg">
                   <Image 
-                    src="/placeholder.svg" 
+                    src="/images/certifications/iso-14040.png" 
                     alt="ECO Platform" 
                     width={80} 
                     height={80}
@@ -236,6 +302,7 @@ export default function SupplierDashboard() {
   const [showDashboard, setShowDashboard] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [showChatbot, setShowChatbot] = useState(false)
 
   useEffect(() => {
     const onboardingComplete = localStorage.getItem('supplierOnboardingComplete')
@@ -457,24 +524,84 @@ export default function SupplierDashboard() {
             <h2 className="text-2xl font-bold mb-4">Order Management</h2>
             <Card>
               <CardHeader>
-                <CardTitle>Recent Orders</CardTitle>
-                <CardDescription>Track and manage your customer orders</CardDescription>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Recent Orders</CardTitle>
+                    <CardDescription>Track and manage your customer orders</CardDescription>
+                  </div>
+                  <Button variant="outline">
+                    View All Orders
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="rounded-md border">
-                    <div className="p-4">
-                      <h4 className="font-medium">Order #1234</h4>
-                      <p className="text-sm text-muted-foreground">Customer: Acme Construction</p>
-                      <p className="text-sm text-muted-foreground">Status: Processing</p>
+                <div className="rounded-md border">
+                  {recentOrders.map((order, index) => (
+                    <div key={order.id}>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className="relative w-12 h-12 rounded-full overflow-hidden border bg-gray-50 flex items-center justify-center">
+                              {order.customer.logo ? (
+                                <Image
+                                  src={order.customer.logo}
+                                  alt={order.customer.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <Building2 className="h-6 w-6 text-gray-400" />
+                              )}
+                            </div>
+                            <div>
+                              <h4 className="font-medium flex items-center gap-2">
+                                {order.id}
+                                <span className="text-sm text-muted-foreground">
+                                  • {order.customer.name}
+                                </span>
+                              </h4>
+                              <div className="flex items-center gap-4 mt-1">
+                                <p className="text-sm text-muted-foreground">
+                                  {order.product}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                  {order.quantity}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <p className="font-medium">{order.value}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(order.date).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <Badge 
+                              variant={
+                                order.status === 'Delivered' ? 'default' :
+                                order.status === 'Processing' ? 'secondary' :
+                                order.status === 'Shipped' ? 'outline' :
+                                'destructive'
+                              }
+                              className={`px-2 py-1 text-xs font-medium ${
+                                order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                order.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
+                                order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}
+                            >
+                              {order.status}
+                            </Badge>
+                            <Button variant="ghost" size="icon">
+                              <ChevronDown className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      {index < recentOrders.length - 1 && <Separator />}
                     </div>
-                    <Separator />
-                    <div className="p-4">
-                      <h4 className="font-medium">Order #1235</h4>
-                      <p className="text-sm text-muted-foreground">Customer: BuildRight Inc.</p>
-                      <p className="text-sm text-muted-foreground">Status: Shipped</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -523,6 +650,17 @@ export default function SupplierDashboard() {
           </section>
         </div>
       </main>
+      <ChatbotPopup
+        isOpen={showChatbot}
+        onClose={() => setShowChatbot(false)}
+      />
+      <Button
+        className="fixed bottom-4 right-4 rounded-full shadow-lg"
+        onClick={() => setShowChatbot(true)}
+      >
+        <MessageSquare className="mr-2 h-4 w-4" />
+        Need Help?
+      </Button>
     </div>
   )
 }
