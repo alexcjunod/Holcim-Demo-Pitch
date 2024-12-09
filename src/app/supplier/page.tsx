@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Bell, Building2, ChevronDown, FileText, Globe2, Home, Package, PieChart, Plus, Settings, Truck, Leaf, Recycle, X, MessageSquare } from 'lucide-react'
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -541,18 +542,15 @@ export default function SupplierDashboard() {
                       <div className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className="relative w-12 h-12 rounded-full overflow-hidden border bg-gray-50 flex items-center justify-center">
-                              {order.customer.logo ? (
-                                <Image
-                                  src={order.customer.logo}
-                                  alt={order.customer.name}
-                                  fill
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <Building2 className="h-6 w-6 text-gray-400" />
-                              )}
-                            </div>
+                            <Avatar className="h-12 w-12">
+                              <AvatarImage
+                                src={order.customer.logo}
+                                alt={order.customer.name}
+                              />
+                              <AvatarFallback>
+                                {order.customer.name.split(' ').map(word => word[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
                             <div>
                               <h4 className="font-medium flex items-center gap-2">
                                 {order.id}
